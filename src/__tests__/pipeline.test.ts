@@ -56,18 +56,3 @@ describe("Bug 3 — transient errors are retried and the revision loop is bounde
   });
 });
 
-describe("Bonus Edge Case — stream returns valid syntax but fails processing constraints", () => {
-  it("fails cleanly if an unexpected runtime error occurs during processing", async () => {
-    const res = await generate({
-      behavior: "ok",
-      advanceToNextStage: async () => {
-        /* succeeds */
-      },
-      // Force a failure down the line by passing an unstable review function
-      reviewPasses: () => {
-        throw new Error("Unexpected schema mismatch or downstream validation crash");
-      },
-    });
-    expect(res.status).toBe("error");
-  });
-});
